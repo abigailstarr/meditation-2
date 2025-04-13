@@ -1,40 +1,65 @@
-<link rel="stylesheet" href="https://generativeart.online/css/drawing-app.css"
+<head>
+  <style>
+    .emoji {
+      position: absolute;
+      font-size: 26px;
+      transform: translate(-50%, -50%);
+      transition: transform 45s linear;
+    }
+  </style>
+</head>
+
+<link rel="stylesheet" href="https://generativeart.online/css/drawing-app.css">
 
 <body></body>
 
 <script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
 
 <script>
+  let isDrawing = false;
 
-  function emoji () {
-    //every 60th of a second, the emoji function runs again
-    requestAnimationFrame(emoji)
-    
+  nn.on("mousedown", function(e) {
+    isDrawing = true;
+    emoji(e.clientX, e.clientY);
+  });
+  
+  nn.on("mousemove", function(e) {
+    if (isDrawing) {
+      emoji(e.clientX, e.clientY);
+    }
+  });
+
+  nn.on("mouseup", function() {
+    isDrawing = false;
+  });
+
+  function emoji(x, y) {
     //define an array of emojis
     const emojis = [
       "🌼", "🌸", "🌻", "🌹", "🌺", "🌷", "🪻", "🏵️"
-    ]
-    
-    //select a random emoji
-    const randomEmoji = nn.random(emojis)
-    
-    //define css
-    const css = {
-        position: "absolute",
-        fontSize: "50px",
-        left: nn.mouseX,
-        top: nn.mouseY
-      }
-    
-    //add random emoji to the body
-    if (nn.mouseDown) {
-      nn.create("span")
-      .content(randomEmoji)
-      .css(css)
-      .addTo("body")
-    }
-  }
-  
-  nn.on("click", emoji)
+    ];
 
+    //select a random emoji
+    const randomEmoji = nn.random(emojis);
+
+    const emoji = nn.create("span").content(randomEmoji);
+    emoji.className = "emoji";
+    emoji.style.left = (x - 13) + 'px';
+    emoji.style.top = (y - 13) + 'px';
+
+    document.body.appendChild(emoji);
+    
+    const randomDelay = 500 + (Math.random() * 6000);
+    
+    setTimeout(function() {
+      const moveX = (Math.random() - 0.5) * window.innerWidth * 6;
+      const moveY = (Math.random() - 0.5) * window.innerHeight * 6;
+      
+      emoji.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      
+      emoji.addEventListener('transitionend', function() {
+          emoji.remove();
+      });
+    }, randomDelay);
+  }
 </script>
