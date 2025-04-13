@@ -2,9 +2,9 @@
   <style>
     .emoji {
       position: absolute;
-      font-size: 26px;
-      transform: translate(-50%, -50%);
-      transition: transform 45s linear;
+      font-size: 16px;
+      transform: translate(-50%, -50%) scale(1);
+      transition: transform 300s linear, filter 30s linear,  opacity 100s linear;
     }
   </style>
 </head>
@@ -17,6 +17,32 @@
 
 <script>
   let isDrawing = false;
+  
+  const emojiSets = [{
+      emojis: ["🌼", "🌸", "🌻", "🌹", "🌺", "🌷", "🪻", "🏵️"]
+    },
+    {
+      emojis: ["➕", "➖", "✖️", "➗", "🟰"]
+    }, 
+    {
+      emojis: ["😿", "😾", "🙀", "😺", "😽", "😼", "😸", "😹", "😻"]
+    },
+    {
+      emojis: ["🚀", "👾", "☄️", "🛰️", "🌕", "🌚", "👽"]
+    }
+    ];
+  
+  let currentSetIndex = 0;
+  
+  document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space') {
+      // Prevent default space behavior (like scrolling)
+      e.preventDefault();
+
+      // Cycle to the next emoji set
+      currentSetIndex = (currentSetIndex + 1) % emojiSets.length;
+    }
+  });
 
   nn.on("mousedown", function(e) {
     isDrawing = true;
@@ -34,31 +60,34 @@
   });
 
   function emoji(x, y) {
-    //define an array of emojis
-    const emojis = [
-      "🌼", "🌸", "🌻", "🌹", "🌺", "🌷", "🪻", "🏵️"
-    ];
-
     //select a random emoji
-    const randomEmoji = nn.random(emojis);
+    const currSet = emojiSets[currentSetIndex];
+    const randomEmoji = nn.random(currSet.emojis);
 
     const emoji = nn.create("span").content(randomEmoji);
     emoji.className = "emoji";
-    emoji.style.left = (x - 13) + 'px';
-    emoji.style.top = (y - 13) + 'px';
+    emoji.style.left = (x - 8) + 'px';
+    emoji.style.top = (y - 8) + 'px';
+    emoji.style.filter = 'grayscale(0%)';
 
     document.body.appendChild(emoji);
 
-    const randomDelay = 500 + (Math.random() * 6000);
+    const randomDelay = 3000 + (Math.random() * 10000);
 
     setTimeout(function() {
       const moveX = (Math.random() - 0.5) * window.innerWidth * 6;
       const moveY = (Math.random() - 0.5) * window.innerHeight * 6;
+      
+      const randSize = (Math.random() * 10) + 5;
 
-      emoji.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      emoji.style.transform = `translate(${moveX}px, ${moveY}px) scale(${randSize})`;
+      emoji.style.filter = 'grayscale(100%)';
+      emoji.style.opacity = '0';
 
-      emoji.addEventListener('transitionend', function() {
-        emoji.remove();
+      emoji.addEventListener('transitionend', function(e) {
+        if (e.propertyName === 'opacity') {
+            emoji.remove();
+        }
       });
     }, randomDelay);
   }
