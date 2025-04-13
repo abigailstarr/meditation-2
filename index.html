@@ -22,7 +22,7 @@
     isDrawing = true;
     emoji(e.clientX, e.clientY);
   });
-  
+
   nn.on("mousemove", function(e) {
     if (isDrawing) {
       emoji(e.clientX, e.clientY);
@@ -48,17 +48,17 @@
     emoji.style.top = (y - 13) + 'px';
 
     document.body.appendChild(emoji);
-    
+
     const randomDelay = 500 + (Math.random() * 6000);
-    
+
     setTimeout(function() {
       const moveX = (Math.random() - 0.5) * window.innerWidth * 6;
       const moveY = (Math.random() - 0.5) * window.innerHeight * 6;
-      
+
       emoji.style.transform = `translate(${moveX}px, ${moveY}px)`;
-      
+
       emoji.addEventListener('transitionend', function() {
-          emoji.remove();
+        emoji.remove();
       });
     }, randomDelay);
   }
