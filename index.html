@@ -4,7 +4,7 @@
       position: absolute;
       font-size: 16px;
       transform: translate(-50%, -50%) scale(1);
-      transition: transform 300s linear, filter 30s linear,  opacity 100s linear;
+      transition: transform 200s linear, filter 15s linear,  opacity 20s linear;
     }
   </style>
 </head>
@@ -26,11 +26,7 @@
     }, 
     {
       emojis: ["😿", "😾", "🙀", "😺", "😽", "😼", "😸", "😹", "😻"]
-    },
-    {
-      emojis: ["🚀", "👾", "☄️", "🛰️", "🌕", "🌚", "👽"]
-    }
-    ];
+    }];
   
   let currentSetIndex = 0;
   
@@ -72,13 +68,13 @@
 
     document.body.appendChild(emoji);
 
-    const randomDelay = 3000 + (Math.random() * 10000);
+    const randomDelay = 3000 + (Math.random() * 20000);
 
     setTimeout(function() {
       const moveX = (Math.random() - 0.5) * window.innerWidth * 6;
       const moveY = (Math.random() - 0.5) * window.innerHeight * 6;
       
-      const randSize = (Math.random() * 10) + 5;
+      const randSize = (Math.random() * 20) + 5;
 
       emoji.style.transform = `translate(${moveX}px, ${moveY}px) scale(${randSize})`;
       emoji.style.filter = 'grayscale(100%)';
